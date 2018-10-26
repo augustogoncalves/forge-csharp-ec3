@@ -120,7 +120,7 @@ namespace forgeSample.Controllers
 
                         RestRequest postElement = new RestRequest("api/subassemblies/{subassemblyid}/elements", Method.POST);
                         postElement.AddUrlSegment("subassemblyid", newSubassembly.id);
-                        postElement.AddJsonBody(new { name = (string)element.name, unit = (string)element.unit, quantity = (double)element.volume, collection_id="ee83239f0aba4911af5a228b6dbd3c12" });
+                        postElement.AddJsonBody(new { name = (string)element.name, unit = (string)element.unit, quantity = (double)element.volume, collection_id = "aaf6d882377b4edf91270cc3188020be" });
                         postElement.AddHeader("Authorization", string.Format("Token {0}", credentials.EC3Token));
                         IRestResponse resElement = await _client.ExecuteTaskAsync(postElement);
                         dynamic newElement = JObject.Parse(resElement.Content);

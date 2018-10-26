@@ -56,6 +56,10 @@ function dataContains(assembly) {
 }
 
 function ec3submit() {
+    if (typeof (NOP_VIEWER) === "undefined") {
+        alert('Please select BIM 360 file');
+        return;
+    }
     var viewer = NOP_VIEWER;
     data = [];
     viewer.getObjectTree(function (objectTree) {
@@ -79,6 +83,7 @@ function ec3submit() {
                     if (data[i].subassembly.length == 0)
                         data.splice(i, 1);
 
+                $('#ec3submit').html('Sending...');
 
                 $.ajax({
                     url: '/api/ec3/projects/' + $('#ec3projects').val(),
@@ -86,7 +91,9 @@ function ec3submit() {
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     dataType: 'json',
-                    success: function (res) {
+                    complete: function (res) {
+                        $('#ec3submit').html('Send to project');
+                        alert('Done');
                     }
                 });
             });
