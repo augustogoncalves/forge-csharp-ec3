@@ -74,7 +74,7 @@ function ec3submit() {
                     var v = getPropByName(ele.properties, "Volume");
                     var index = dataContains(c.displayValue);
                     if (index >= 0)
-                        data[index].subassembly.push({ name: n, elements: [{ name: m.displayValue, volume: v.displayValue, unit: v.units }] });
+                        data[index].subassembly.push({ name: n, elements: [{ name: m.displayValue, volume: v.displayValue, unit: v.units.replace('^', '') }] });
                     else
                         data.push({ name: c.displayValue, subassembly: [] });
                 })
