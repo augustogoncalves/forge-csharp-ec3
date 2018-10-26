@@ -41,6 +41,12 @@ namespace forgeSample.Controllers
                 return new AccessToken();
             }
 
+            if (string.IsNullOrEmpty(credentials.TokenPublic))
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return new AccessToken();
+            }
+
             // return the public (viewables:read) access token
             return new AccessToken()
             {
@@ -115,6 +121,14 @@ namespace forgeSample.Controllers
         public string TokenPublic { get; set; }
         public string RefreshToken { get; set; }
         public DateTime ExpiresAt { get; set; }
+
+        public string EC3Token { get; set; }
+
+        public void SetEC3Token(string token, IResponseCookies cookies)
+        {
+            this.EC3Token = token;
+            cookies.Append(FORGE_COOKIE, JsonConvert.SerializeObject(this));
+        }
 
         /// <summary>
         /// Perform the OAuth authorization via code

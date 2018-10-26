@@ -24,12 +24,12 @@
 
 <body>
   <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
-  <nav class="navbar navbar-default navbar-fixed-top">
+  <nav class="navbar navbar-default navbar-fixed-top" style="background-image: url(https://buildingtransparency.org/assets/svg/company-logo-large.svg); background-repeat: no-repeat; background-size: 120px; background-position-x: 10px; background-position-y: 5px">
     <div class="container-fluid">
       <ul class="nav navbar-nav left">
         <li>
           <a href="http://developer.autodesk.com" target="_blank">
-            <img alt="Autodesk Forge" src="//developer.static.autodesk.com/images/logo_forge-2-line.png" height="20">
+            <!--<img alt="Autodesk Forge" src="" height="20">-->
           </a>
         </li>
       </ul>
@@ -42,7 +42,7 @@
   <!-- End of navbar -->
   <div class="container-fluid fill">
     <div class="row fill">
-      <div class="col-sm-4 fill">
+      <div class="col-sm-3 fill">
         <div class="panel panel-default fill">
           <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
             <span id="userInfo"></span>
@@ -64,8 +64,30 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-8 fill">
+      <div class="col-sm-7 fill">
         <div id="forgeViewer"></div>
+      </div>
+      <div class="col-sm-2 fill">
+        <div class="panel panel-default fill" style="margin-left:10px;">
+          <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
+            <span id="ec3userInfo">Building Transparency</span>
+          </div>
+          <div>
+            <div style="padding-top: 100px; text-align: center;" id="ec3signin">
+              <input type="email" class="form-control" id="username" placeholder="Email" style="max-width:200px;"><br />
+              <input type="password" class="form-control" id="password" placeholder="Password" style="max-width:200px;"><br />
+              <button class="btn btn-lg btn-default" id="ec3SigninButton">
+                <img src="https://buildingtransparency.org/assets/svg/company-logo-large.svg" height="20"> Sign in
+              </button>
+            </div>
+            <div id="ec3data">
+              <select class="form-control" id="ec3projects" >
+              </select>
+              <br/>
+              <button id="ec3submit" class="btn btn-primary"> <span class="glyphicon glyphicon-send"></span> Send to project</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
