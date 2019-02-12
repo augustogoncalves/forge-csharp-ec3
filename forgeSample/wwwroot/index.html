@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Autodesk Forge Tutorial</title>
+  <title>Building Transparency</title>
   <meta charset="utf-8" />
   <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewhubmodels/raw/master/img/favicon.ico">
   <!-- Common packages: jQuery, Bootstrap, jsTree -->
@@ -14,12 +14,15 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
   <!-- Autodesk Forge Viewer files -->
   <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/style.min.css?v=v6.0" type="text/css">
-  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.min.js?v=v6.0"></script>
+  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.js?v=v6.0"></script>
   <!-- this project files -->
   <link href="css/main.css" rel="stylesheet" />
   <script src="js/ForgeTree.js"></script>
   <script src="js/ForgeViewer.js"></script>
   <script src="js/EC3.js"></script>
+  <script src="js/EC3Extension.js"></script>
+  <script src="https://rawgit.com/anomal/RainbowVis-JS/master/rainbowvis.js"></script>
+  
 </head>
 
 <body>
@@ -64,9 +67,10 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-7 fill">
+      <div class="col-sm-9 fill">
         <div id="forgeViewer"></div>
       </div>
+      <!--
       <div class="col-sm-2 fill">
         <div class="panel panel-default fill" style="margin-left:10px;">
           <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
@@ -88,6 +92,33 @@
               <button id="ec3submit" class="btn btn-primary">Send to project</button>
             </div>
           </div>
+        </div>
+      </div>
+    -->
+    </div>
+  </div>
+  <!-- Sign in EC3 -->
+  <div class="modal fade" id="ec3signin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Thanks for using this sample!</h4>
+        </div>
+        <div class="modal-body">
+          <div style="padding-top: 100px; text-align: center;" id="ec3signin">
+            <input type="email" class="form-control" id="username" placeholder="Email" style="max-width:200px;"><br />
+            <input type="password" class="form-control" id="password" placeholder="Password" style="max-width:200px;"><br />
+            <button class="btn btn-lg btn-default" id="ec3SigninButton">
+              <img src="https://buildingtransparency.org/assets/svg/company-logo-large.svg" height="20"> Sign in
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="provisionAccountSave">Done</button>
         </div>
       </div>
     </div>

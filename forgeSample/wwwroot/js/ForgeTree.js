@@ -125,6 +125,9 @@ function prepareUserHubsTree() {
       'versions': {
         'icon': 'glyphicon glyphicon-time'
       },
+      'views': {
+        'icon': 'glyphicon glyphicon-eye-open'
+      },
       'unsupported': {
         'icon': 'glyphicon glyphicon-ban-circle'
       }
@@ -143,13 +146,21 @@ function prepareUserHubsTree() {
     "plugins": ["types", "state", "sort"],
     "state": { "key": "autodeskHubs" }// key restore tree state
   }).bind("activate_node.jstree", function (evt, data) {
-    if (data != null && data.node != null && (data.node.type == 'versions' || data.node.type == 'bim360documents')) {
+    if (data != null && data.node != null && (data.node.type == 'views' || data.node.type == 'bim360documents')) {
       var urn;
       var viewableId
       if (data.node.id.indexOf('|') > -1) {
-        urn = data.node.id.split('|')[1];
-        viewableId = data.node.id.split('|')[2];
-        launchViewer(urn, viewableId);
+        var params = data.node.id.split('|');
+        if (params.length == 3) {
+          urn = data.node.id.split('|')[1];
+          viewableId = data.node.id.split('|')[2];
+          launchViewer(urn, viewableId);
+        }
+        else if (params.length==2){
+          urn = data.node.id.split('|')[0];
+          viewableId = data.node.id.split('|')[1];
+          launchViewer(urn, viewableId);
+        }
       }
       else {
         launchViewer(data.node.id);

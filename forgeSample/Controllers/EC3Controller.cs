@@ -31,7 +31,7 @@ namespace forgeSample.Controllers
 {
     public class EC3Controller : ControllerBase
     {
-        RestClient _client = new RestClient("https://etl-api.cqd.io");
+        RestClient _client = new RestClient("https://ci-etl-api.cqd.io");
 
         [HttpPost]
         [Route("api/ec3/oauth/signin")]
@@ -79,7 +79,7 @@ namespace forgeSample.Controllers
         {
             Credentials credentials = await Credentials.FromSessionAsync(Request.Cookies, Response.Cookies);
 
-            RestRequest request = new RestRequest("/api/projects", Method.GET);
+            RestRequest request = new RestRequest("/api/bim_projects", Method.GET);
             request.AddHeader("Authorization", string.Format("Token {0}", credentials.EC3Token));
             IRestResponse response = await _client.ExecuteTaskAsync(request);
 
@@ -87,7 +87,34 @@ namespace forgeSample.Controllers
         }
 
         [HttpPost]
+        [Route("api/ec3/projects")]
+        public async Task<IActionResult> SubmitProject(string projectid, [FromBody]JObject bimProject)
+        {
+            Credentials credentials = await Credentials.FromSessionAsync(Request.Cookies, Response.Cookies);
+
+            RestRequest postBIMproject = new RestRequest("/api/bim_projects", Method.POST);
+            postBIMproject.AddParameter("application/json", bimProject, ParameterType.RequestBody);
+            postBIMproject.AddHeader("Authorization", string.Format("Token {0}", credentials.EC3Token));
+            IRestResponse resBIMproject = await _client.ExecuteTaskAsync(postBIMproject);
+
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("api/ec3/projects/{projectid}")]
+        public async Task<JObject> GetProject(string projectid)
+        {
+            Credentials credentials = await Credentials.FromSessionAsync(Request.Cookies, Response.Cookies);
+
+            RestRequest postBIMproject = new RestRequest("/api/bim_projects/{projectid}", Method.GET);
+            postBIMproject.AddUrlSegment("projectid", projectid);
+            postBIMproject.AddHeader("Authorization", string.Format("Token {0}", credentials.EC3Token));
+            IRestResponse resBIMproject = await _client.ExecuteTaskAsync(postBIMproject);
+
+            return JObject.Parse(resBIMproject.Content);
+        }
+
+        // Old version
         public async Task Submit(string projectid, [FromBody]JArray assemblies)
         {
             Credentials credentials = await Credentials.FromSessionAsync(Request.Cookies, Response.Cookies);

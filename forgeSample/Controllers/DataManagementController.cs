@@ -51,7 +51,7 @@ namespace forgeSample.Controllers
             else
             {
                 string[] idParams = id.Split('/');
-                string resource = idParams[idParams.Length - 2];
+                string resource = (idParams.Length>1  ?idParams[idParams.Length - 2] : "views");
                 switch (resource)
                 {
                     case "hubs": // hubs node selected/expanded, show projects
@@ -62,6 +62,8 @@ namespace forgeSample.Controllers
                         return await GetFolderContents(id);
                     case "items":
                         return await GetItemVersions(id);
+                    case "views":
+                        return await GetVersionViews(id);
                 }
             }
 
@@ -233,13 +235,6 @@ namespace forgeSample.Controllers
             return nodes;
         }
 
-        private string GetName(DynamicDictionaryItems folderIncluded, KeyValuePair<string, dynamic> folderContentItem)
-        {
-
-
-            return "N/A";
-        }
-
         private async Task<IList<jsTreeNode>> GetItemVersions(string href)
         {
             IList<jsTreeNode> nodes = new List<jsTreeNode>();
@@ -265,13 +260,34 @@ namespace forgeSample.Controllers
                 catch { urn = Base64Encode(version.Value.id); } // some BIM 360 versions don't have viewable
 
                 jsTreeNode node = new jsTreeNode(
-                    urn,
+                    urn,//version.Value.links.self.href,
                     string.Format("v{0}: {1} by {2}", verNum, versionDate.ToString("dd/MM/yy HH:mm:ss"), userName),
                     "versions",
-                    false);
+                    true);
                 nodes.Add(node);
             }
 
+            return nodes;
+        }
+
+        public async Task<IList<jsTreeNode>> GetVersionViews(string urn)
+        {
+            IList<jsTreeNode> nodes = new List<jsTreeNode>();
+
+            DerivativesApi derivativesApi = new DerivativesApi();
+            derivativesApi.Configuration.AccessToken = Credentials.TokenInternal;
+
+            dynamic views = await derivativesApi.GetMetadataAsync(urn);
+            foreach (KeyValuePair<string, dynamic> view in new DynamicDictionaryItems(views.data.metadata))
+            {
+                if (view.Value.role!="3d") continue;
+                jsTreeNode node = new jsTreeNode(
+                                    string.Format("{0}|{1}", urn, view.Value.guid),
+                                    view.Value.name,
+                                    "views",
+                                    false);
+                nodes.Add(node);
+            }
             return nodes;
         }
 

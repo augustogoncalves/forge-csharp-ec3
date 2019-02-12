@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
 // Written by Forge Partner Development
 //
@@ -35,8 +35,8 @@ function launchViewer(urn, viewableId) {
   };
   var documentId = 'urn:' + urn;
   Autodesk.Viewing.Initializer(options, function onInitialized() {
-    viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer');
-    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D);
+    viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer' );
+    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, { extensions: ['EC3Extension'] });
     viewerApp.loadDocument(documentId, function (doc) {
       // We could still make use of Document.getSubItemsWithProperties()
       // However, when using a ViewingApplication, we have access to the **bubble** attribute,
@@ -51,6 +51,10 @@ function launchViewer(urn, viewableId) {
         viewables.forEach(function (viewable) {
           if (viewable.data.viewableID == viewableId)
             viewerApp.selectItem(viewable.data, onItemLoadSuccess, onItemLoadFail);
+          viewable.data.children.forEach(function (children) {
+            if (children.guid == viewableId)
+              viewerApp.selectItem(viewable.data, onItemLoadSuccess, onItemLoadFail);
+          })
         });
       }
       else
