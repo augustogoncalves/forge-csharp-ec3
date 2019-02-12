@@ -13,7 +13,8 @@ $(document).ready(function () {
             method: 'POST',
             data: { username: $('#username').val(), password: $('#password').val() },
             success: function (res) {
-                showEC3(res.Key);
+                $('#ec3signin').modal('hide');
+                ec3export();
             }
         });
     })
@@ -73,7 +74,7 @@ function ec3export() {
 
     jQuery.ajax({
         url: '/api/ec3/oauth/token',
-        fail: function (res) {
+        error: function (res) {
             $('#ec3signin').modal('toggle');
         },
         success: function () {
