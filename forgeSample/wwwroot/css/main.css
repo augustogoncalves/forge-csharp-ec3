@@ -27,14 +27,21 @@ body {
 }
 
 .ec3exportToolbarButton {
-  background-image: url(https://github.com/encharm/Font-Awesome-SVG-PNG/raw/master/white/png/24/upload.png);
+  background-image: url(/img/ec3up.png);
   background-size: 24px;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .ec3importToolbarButton {
-  background-image: url(https://github.com/encharm/Font-Awesome-SVG-PNG/raw/master/white/png/24/download.png);
+  background-image: url(/img/ec3down.png);
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ec3propertiesToolbarButton {
+  background-image: url(/img/ec3props.png);
   background-size: 24px;
   background-repeat: no-repeat;
   background-position: center;

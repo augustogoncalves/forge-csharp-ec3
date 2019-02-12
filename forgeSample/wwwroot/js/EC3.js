@@ -226,14 +226,15 @@ function ec3loaddata(ec3projectid) {
     });
 }
 
+var values = undefined;
+
 function ec3showresults(data) {
     if (typeof (NOP_VIEWER) === "undefined") {
         alert('Please select BIM 360 file');
         return;
     }
+    values = {};
     var viewer = NOP_VIEWER;
-
-    var values = {};
     var max = Number.MIN_SAFE_INTEGER;
     var min = Number.MAX_SAFE_INTEGER;
 
@@ -246,7 +247,7 @@ function ec3showresults(data) {
                 var potential = gwpc - gwpa;
                 if (potential > max) max = potential;
                 if (potential < min) min = potential;
-                values[instance.external_id] = potential;
+                values[instance.external_id] = {gwpc: gwpc, gwpa: gwpa, potential: potential};
             })
         })
     })
@@ -256,9 +257,9 @@ function ec3showresults(data) {
     for (var key in values) {
         var dbId = Number.parseInt(key);
         viewer.show(dbId);
-        if (values[key] === 0) viewer.setThemingColor(dbId, new THREE.Vector4(0.75, 0.75, 0.75, 1), viewer.model);
+        if (values[key].potential === 0) viewer.setThemingColor(dbId, new THREE.Vector4(0.75, 0.75, 0.75, 1), viewer.model);
         else {
-            var range = (values[key] - min) / (max - min);
+            var range = (values[key].potential - min) / (max - min);
             viewer.setThemingColor(dbId, getColor(range));
         }
     }
