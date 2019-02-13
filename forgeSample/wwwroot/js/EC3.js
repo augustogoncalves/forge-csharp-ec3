@@ -266,11 +266,12 @@ function ec3showresults(data) {
 }
 
 function getColor(ratio) {
-    var color1 = '00994C';
-    var color2 = '990000';
+    var color1 = '1E9600';
+    var color2 = 'FFF200';
+    var color3 = 'FF0000';
     var rainbow = new Rainbow();
     rainbow.setNumberRange(1, 10);
-    rainbow.setSpectrum(color1, color2);
+    rainbow.setSpectrum(color1, color2, color3);
     var index = Math.round(ratio * 10)
     var color = rainbow.colourAt(index);
     return new THREE.Vector4(
