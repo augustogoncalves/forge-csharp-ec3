@@ -14,12 +14,14 @@ $(document).ready(function () {
             data: { username: $('#username').val(), password: $('#password').val() },
             success: function (res) {
                 $('#ec3signin').modal('hide');
-                ec3export();
+                //ec3export();
             }
         });
     })
 
     $('#ec3submit').click(ec3submit);
+    $('#ec3selected').click(ec3selected);
+
 });
 
 function showEC3(token) {
@@ -86,12 +88,16 @@ function ec3export() {
                     var found = false;
                     data.forEach(function (project) {
                         if (project.bim_urn === version.id && !found) {
-                            ec3loaddata(project.id);
+                            //ec3loaddata(project.id);
                             found = true;
                         }
                     });
-                    if (found) alert('This project was already exported.');
-                    else ec3submit();
+                    if (found) {
+                        if (confirm('This project was already exported, export again?'))
+                            ec3submit();
+                    }
+                    else
+                        ec3submit();
                 }
             });
         }
@@ -191,7 +197,7 @@ function ec3import() {
 
     jQuery.ajax({
         url: '/api/ec3/oauth/token',
-        fail: function (res) {
+        error: function (res) {
             $('#ec3signin').modal('toggle');
         },
         success: function () {
@@ -201,19 +207,42 @@ function ec3import() {
                 success: function (res) {
                     var data = JSON.parse(res);
                     var found = false;
+                    var models = [];
                     data.forEach(function (project) {
-                        if (project.bim_urn === version.id && !found) {
-                            ec3loaddata(project.id);
+                        if (project.bim_urn === version.id) {
+                            //ec3loaddata(project.id);
+                            models.push(project);
                             found = true;
                         }
                     });
-                    if (!found) {
+                    if (found) {
+                        if (models.length == 1)
+                            ec3loaddata(models[0].id);
+                        else {
+                            // list models to choose
+                            $("#ec3bim360projects").find('option').remove();
+                            models.forEach(function (model) {
+                                var o = new Option(model.name, model.id);
+                                /// jquerify the DOM object 'o' so we can use the html method
+                                $(o).html(model.name);
+                                $("#ec3bim360projects").append(o);
+                            })
+                            $('#ec3select').modal('toggle');
+                        }
+                    }
+                    else {
                         alert('Could not find matching project');
                     }
                 }
             });
         }
     });
+}
+
+function ec3selected() {
+    var id = $("#ec3bim360projects").val();
+    $('#ec3select').modal('toggle');
+    ec3loaddata(id);
 }
 
 function ec3loaddata(ec3projectid) {
@@ -247,7 +276,7 @@ function ec3showresults(data) {
                 var potential = gwpc - gwpa;
                 if (potential > max) max = potential;
                 if (potential < min) min = potential;
-                values[instance.external_id] = {gwpc: gwpc, gwpa: gwpa, potential: potential};
+                values[instance.external_id] = { gwpc: gwpc, gwpa: gwpa, potential: potential };
             })
         })
     })
@@ -270,9 +299,9 @@ function getColor(ratio) {
     var color2 = 'FFF200';
     var color3 = 'FF0000';
     var rainbow = new Rainbow();
-    rainbow.setNumberRange(1, 10);
+    rainbow.setNumberRange(1, 100);
     rainbow.setSpectrum(color1, color2, color3);
-    var index = Math.round(ratio * 10)
+    var index = Math.round(ratio * 100)
     var color = rainbow.colourAt(index);
     return new THREE.Vector4(
         parseInt(color.substring(0, 2), 16) / 256,
